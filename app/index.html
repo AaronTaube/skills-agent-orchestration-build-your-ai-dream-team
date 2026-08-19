@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Pulse</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="page-header">
+      <p class="eyebrow">Project Pulse</p>
+      <h1>Project Pulse</h1>
+      <p id="dashboard-summary">Loading Mona's project dashboard...</p>
+    </header>
+
+    <main class="dashboard" id="dashboard" aria-label="Projects"></main>
+
+    <template id="project-card-template">
+      <article class="project-card">
+        <div class="project-card__header">
+          <h2 class="project-card__title"></h2>
+          <span class="status-badge"></span>
+        </div>
+        <p class="project-card__description"></p>
+        <dl class="project-card__meta">
+          <div>
+            <dt>Owner</dt>
+            <dd data-field="owner"></dd>
+          </div>
+          <div>
+            <dt>Priority</dt>
+            <dd class="priority" data-field="priority"></dd>
+          </div>
+          <div>
+            <dt>Recent activity</dt>
+            <dd data-field="recentActivity"></dd>
+          </div>
+          <div>
+            <dt>Due date</dt>
+            <dd data-field="dueDate"></dd>
+          </div>
+        </dl>
+        <div class="progress" aria-label="Project progress">
+          <span class="progress__label"></span>
+          <progress max="100" value="0"></progress>
+        </div>
+      </article>
+    </template>
+
+    <script type="module">
+      const dashboard = document.querySelector("#dashboard");
+      const summary = document.querySelector("#dashboard-summary");
+      const template = document.querySelector("#project-card-template");
+
+      const normalizeClassToken = (value, fallback = "unknown") => {
+        const token = String(value || fallback)
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+
+        return token || fallback;
+      };
+
+      const clampProgress = (value) => {
+        const numericValue = Number(value);
+
+        if (!Number.isFinite(numericValue)) {
+          return 0;
+        }
+
+        return Math.min(100, Math.max(0, Math.round(numericValue)));
+      };
+
+      const setText = (card, selector, value, fallback) => {
+        const element = card.querySelector(selector);
+        element.textContent = value || fallback;
+      };
+
+      const renderEmptyState = () => {
+        dashboard.innerHTML = "";
+        summary.textContent = "No active projects are available right now.";
+
+        const emptyState = document.createElement("section");
+        emptyState.className = "empty-state";
+        emptyState.setAttribute("aria-live", "polite");
+        emptyState.innerHTML = "<h2>No projects to show</h2><p>Add projects to project-data.json to populate this dashboard.</p>";
+        dashboard.append(emptyState);
+      };
+
+      const renderErrorState = (message) => {
+        dashboard.innerHTML = "";
+        summary.textContent = "Project data could not be loaded.";
+
+        const errorState = document.createElement("section");
+        errorState.className = "error-state";
+        errorState.setAttribute("role", "alert");
+        errorState.innerHTML = `<h2>Unable to load projects</h2><p>${message}</p><p>Run the dashboard from the VS Code launch configuration or a static file server.</p>`;
+        dashboard.append(errorState);
+      };
+
+      const renderProjects = (projects) => {
+        dashboard.innerHTML = "";
+
+        if (!projects.length) {
+          renderEmptyState();
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        projects.forEach((project) => {
+          const card = template.content.firstElementChild.cloneNode(true);
+          const status = project.status || "Unknown";
+          const priority = project.priority || "Unknown";
+          const statusToken = normalizeClassToken(status);
+          const priorityToken = normalizeClassToken(priority);
+          const progressValue = clampProgress(project.progress);
+
+          card.classList.add(`status-${statusToken}`, `priority-${priorityToken}`);
+          setText(card, ".project-card__title", project.name, "Untitled project");
+          setText(card, ".status-badge", status, "Unknown");
+          setText(card, ".project-card__description", project.description, "No description provided.");
+          setText(card, "[data-field='owner']", project.owner, "Unassigned");
+          setText(card, "[data-field='priority']", priority, "Unknown");
+          setText(card, "[data-field='recentActivity']", project.recentActivity, "No recent activity");
+          setText(card, "[data-field='dueDate']", project.dueDate, "No due date");
+
+          const statusBadge = card.querySelector(".status-badge");
+          statusBadge.classList.add(`status-${statusToken}`);
+
+          const priorityElement = card.querySelector(".priority");
+          priorityElement.classList.add(`priority-${priorityToken}`);
+
+          const progressElement = card.querySelector("progress");
+          progressElement.value = progressValue;
+          setText(card, ".progress__label", `${progressValue}% complete`, "0% complete");
+
+          fragment.append(card);
+        });
+
+        dashboard.append(fragment);
+        summary.textContent = `${projects.length} project${projects.length === 1 ? "" : "s"} in Mona's portfolio.`;
+      };
+
+      try {
+        const response = await fetch("./project-data.json");
+
+        if (!response.ok) {
+          throw new Error(`project-data.json returned ${response.status}`);
+        }
+
+        const data = await response.json();
+        const projects = Array.isArray(data.projects) ? data.projects : [];
+
+        if (!Array.isArray(data.projects)) {
+          console.warn("project-data.json should contain a top-level projects array.");
+        }
+
+        renderProjects(projects);
+      } catch (error) {
+        console.error("Project Pulse data load failed:", error);
+        renderErrorState("The project-data.json file was not available or could not be parsed.");
+      }
+    </script>
+  </body>
+</html>

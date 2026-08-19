@@ -1,0 +1,70 @@
+{
+  "projects": [
+    {
+      "id": "proj-001",
+      "name": "Customer Insights Portal",
+      "owner": "Mona",
+      "status": "On Track",
+      "recentActivity": "Updated analytics widgets 2 days ago",
+      "priority": "High",
+      "description": "A self-service reporting surface for support and sales teams.",
+      "progress": 68,
+      "dueDate": "2026-09-18"
+    },
+    {
+      "id": "proj-002",
+      "name": "Mobile Checkout Reliability",
+      "owner": "Ari",
+      "status": "At Risk",
+      "recentActivity": "Investigated payment timeout trend yesterday",
+      "priority": "Critical",
+      "description": "Stabilize the mobile purchase path before the seasonal campaign begins.",
+      "progress": 42,
+      "dueDate": "2026-08-30"
+    },
+    {
+      "id": "proj-003",
+      "name": "Partner API Access Review",
+      "owner": "Priya",
+      "status": "Blocked",
+      "recentActivity": "Waiting on security approval since Monday",
+      "priority": "Medium",
+      "description": "Review partner API scopes and update access policies.",
+      "progress": 25,
+      "dueDate": "2026-09-05"
+    },
+    {
+      "id": "proj-004",
+      "name": "Brand Refresh Launch Kit",
+      "owner": "Theo",
+      "status": "Done",
+      "recentActivity": "Published final launch assets 4 days ago",
+      "priority": "Low",
+      "description": "Finalize templates, copy guidance, and launch documentation for the new brand system.",
+      "progress": 100,
+      "dueDate": "2026-08-12"
+    },
+    {
+      "id": "proj-005",
+      "name": "Enterprise Onboarding Workflow Modernization",
+      "owner": "Sam",
+      "status": "On Track",
+      "recentActivity": "Completed workflow mapping this morning",
+      "priority": "Medium",
+      "description": "Replace manual onboarding handoffs with a guided workflow that gives account teams clearer ownership, automatic reminders, and better visibility for long-running enterprise implementations.",
+      "progress": 57,
+      "dueDate": "2026-10-02"
+    },
+    {
+      "id": "proj-006",
+      "name": "Data Warehouse Cost Controls",
+      "owner": "Lin",
+      "status": "At Risk",
+      "recentActivity": "Flagged budget variance 3 hours ago",
+      "priority": "High",
+      "description": "Introduce monitoring and query guardrails to reduce unplanned warehouse spend.",
+      "progress": 36,
+      "dueDate": "2026-09-10"
+    }
+  ]
+}

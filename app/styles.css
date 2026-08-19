@@ -1,0 +1,235 @@
+/* ==========================================================================
+   Project Pulse Dashboard Styles
+   ========================================================================== */
+
+/* Variables & Theming */
+:root {
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+  
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  
+  /* Status Colors */
+  --status-on-track-bg: #dcfce7;
+  --status-on-track-text: #166534;
+  --status-at-risk-bg: #fef08a;
+  --status-at-risk-text: #854d0e;
+  --status-blocked-bg: #fee2e2;
+  --status-blocked-text: #991b1b;
+  --status-done-bg: #e0e7ff;
+  --status-done-text: #3730a3;
+  
+  /* Priority Colors */
+  --priority-low: #94a3b8;
+  --priority-medium: #3b82f6;
+  --priority-high: #f59e0b;
+  --priority-critical: #ef4444;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --transition-speed: 0.2s;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+/* Dashboard Container */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem 1.5rem;
+}
+
+/* Project Card */
+.project-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-card:hover, .project-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Resilient content styling inside project card */
+.project-card h2,
+.project-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--color-text-main);
+  line-height: 1.2;
+}
+
+.project-card p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Badges & Status */
+.status-badge,
+[data-status],
+[class^="status-"] {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: fit-content;
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+/* Status specific coloring */
+.status-on-track,
+[data-status="On Track"],
+[data-status="on-track"] {
+  background-color: var(--status-on-track-bg) !important;
+  color: var(--status-on-track-text) !important;
+}
+
+.status-at-risk,
+[data-status="At Risk"],
+[data-status="at-risk"] {
+  background-color: var(--status-at-risk-bg) !important;
+  color: var(--status-at-risk-text) !important;
+}
+
+.status-blocked,
+[data-status="Blocked"],
+[data-status="blocked"] {
+  background-color: var(--status-blocked-bg) !important;
+  color: var(--status-blocked-text) !important;
+}
+
+.status-done,
+[data-status="Done"],
+[data-status="done"] {
+  background-color: var(--status-done-bg) !important;
+  color: var(--status-done-text) !important;
+}
+
+/* Priorities */
+.priority,
+[data-priority],
+[class^="priority-"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+/* Priority dot indicator */
+.priority::before,
+[data-priority]::before,
+[class^="priority-"]::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-text-muted); /* Fallback */
+}
+
+/* Priority specific coloring */
+.priority-low::before, [data-priority="Low"]::before, [data-priority="low"]::before {
+  background-color: var(--priority-low);
+}
+.priority-medium::before, [data-priority="Medium"]::before, [data-priority="medium"]::before {
+  background-color: var(--priority-medium);
+}
+.priority-high::before, [data-priority="High"]::before, [data-priority="high"]::before {
+  background-color: var(--priority-high);
+}
+.priority-critical::before, [data-priority="Critical"]::before, [data-priority="critical"]::before {
+  background-color: var(--priority-critical);
+}
+
+/* Helper for Recent Activity */
+.recent-activity,
+.project-card > p:last-child {
+  margin-top: auto; /* Push to bottom if card is taller */
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Ensure strong tags or spans have contrast */
+.project-card strong, 
+.project-card b {
+  color: var(--color-text-main);
+}
+
+/* Accessibility & Interactivity */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible,
+.project-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
